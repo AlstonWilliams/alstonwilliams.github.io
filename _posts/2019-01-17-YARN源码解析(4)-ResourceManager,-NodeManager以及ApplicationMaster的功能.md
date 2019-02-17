@@ -1,0 +1,223 @@
+---
+layout: post
+title: YARN源码解析(4)-ResourceManager,-NodeManager以及ApplicationMaster的功能
+date: 2019-02-17
+author: AlstonWilliams
+header-img: img/post-bg-2015.jpg
+catalog: true
+categories:
+- Hadoop
+tags:
+- Hadoop
+---
+在之前的Hadoop版本中，是不存在ResourceManager, NodeManager的概念的，此时，只有JobTracker以及TaskTracker的概念。
+
+但是，此时，在功能上，耦合度很高。YARN作为一个资源调度平台，却不是一个通用的平台，而是紧紧和MapReduce结合在一起。
+
+后来，Hadoop的开发团队终于意识到，应当把YARN和MapReduce的实现独立出来，让YARN能够作为一个通用的资源调度平台。
+
+而当Hadoop的开发团队把YARN抽离出来之后，之后YARN就是一片欣欣向荣的景象了。后来出现的好多分布式调度系统，都支持在YARN上进行调度。比如，Spark就同时支持YARN，Mesos等。
+
+所以，在这篇文章中，我们将会介绍，再将YARN单独抽离出来之后，形成的三个组件-ResourceManager, NodeManager以及ApplicationMaster，它们各自的职责。
+
+## ResourceManager
+
+YARN中，最重要的一个组件就是ResourceManager。实际上，严格来说，YARN只包含两个组件，ResourceManager以及NodeManager。而ApplicationMaster只是一个YARN的客户端。所以，在YARN中，实际上是不信任ApplicationMaster的。因为ApplicationMaster可以由用户自己实现，可能存在危险。
+
+ResourceManager包含了很多组件，我们将它们分成几大类，和Client进行交互的组件，和ApplicationMaster交互的组件，和NodeManager交互的组件，其他核心组件，以及和安全相关的组件。
+
+#### 和Client进行交互的组件
+- ClientRMService: 这个组件，是用于接收Client的请求的一个组件。举例来说，我们编写的Job，在提交到ResourceManager上运行的时候，实际上就是和ClientService进行交互的。
+
+- AdminService: 这个组件，用于接收来自Administrator的请求。为什么不把它和前面的ClientRMService放在一起呢？因为对于ClientRMService来说，可能会存在太多请求而导致请求迟迟得不到处理。但是，对于Administrator的请求来说，是不能出现这种情况的。于是，就把它们两个分开来。
+
+- ApplicationACLsManager: 这个组件，是用于验证Client提交的Application的。它会验证用户是否有权限执行操作等。
+
+- RMWebApp: 这个组件用于提供一个Web界面，其中包含了Application信息，集群中可用资源等信息。各位应该对这个界面都不陌生。
+
+#### 和ApplicationMaster交互的组件
+
+- ApplicationMasterService: 这个组件，会接收ApplicationMaster发送来的信息。主要有以下几个:
+  - ApplicationMaster的注册信息
+  - 验证ApplicationMaster发送来的请求
+  - 从ApplicationMaster接收分配和释放资源的请求，并转发给YarnScheduler
+
+- AMLivelinessMonitor: 这个组件会接收ApplicationMaster的心跳信息，来确认ApplicationMaster是否还存活。如果在设置的检测间隔内没有受到来自ApplicationMaster的心跳信息，那么就会认为这个ApplicationMaster已经挂掉了。然后，会重启一个**ApplicationAttempt**并重新调度它。
+
+#### 和NodeManager交互的组件
+
+- ResourceTrackerService: NodeManager会不断地向ResourceManager发送心跳信息，这个组件就是接收这些信息的。它会做这么几件事：
+  - 注册新的Node
+  - 从注册过的Node上，接收心跳信息
+  - 确保只有有效的Node能够和ResourceManager进行交互
+
+在注册了一个新的Node之后, ResourceManager就会给NodeManager发送一个和安全性相关的master key。然后，NodeManager用这个master key来验证ApplicationMaster发送给他的分配Container的请求。
+
+这个master key也不是会一直不变的，为了防止恶意的ApplicationMaster破解master key并向NodeManager提交恶意的Container，所以这个master key会每隔一段时间变一次，并发送给NodeManager.
+
+ResourceTrackerService会将有效的heartbeat转发给YARNScheduler,然后YARNScheduler会根据集群中可用的资源，进行容器的分配。
+
+- NMLivelinessMonitor: 这个组件，会根据NodeManager最后发送的heartbeat的时间，以及设置好的检测间隔，进行Node的有效性检查。一旦认为某个Node已经过期了，那么就会将在这个Node上运行的Container标记为dead状态，并在其他的正常的节点上进行调度。一旦一个Node已经过期，那么就不会再为这个Node分配任何容器。直到它恢复正常。
+
+- NodeListManager: 这个组件维护着一个Node白名单以及Node黑名单。启动时，它们分别被从**'yarn.resourcemanager.nodes.include-path'**以及**'yarn.resourcemanager.nodes.exclude-path'**中读取。当一个白名单中的Node被Administrator手动撤销，那么它就会进入到Node黑名单中。
+
+#### 其他核心组件
+
+除了上面我们已经介绍的一些组件，还有一些比较核心的组件。
+
+- ApplicationsManager: 这个组件维护着一个可以Application的列表。当一个Client提交一个Application的时候，ResourceManager首先会验证，这个Application需要的资源是否不合适，然后验证这个Application是否已经被加载过了。最终，ResourceManager会将它提交到Scheduler.
+
+这个组件也负责在一个Application完成后以及被完全清理之前，管理它们。当一个Application完成后，它会生成一个**ApplicationSummary**，并将它记录到daemon的日志文件中。
+
+ResourceManager中有一个属性-**'yarn.resourcemanager.max-completed-applications'**，这个属性控制ResourceManager最多能够维护多少个已经完成但没有被清理的Application。这就相当于一个FIFO队列，一旦超过了这个阈值，最早的Application就会被从这个队列中清除。
+
+- ApplicationMasterLauncher: 即使在YARN中，Container的加载，都是由ApplicaitonMaster告诉NodeManager，来加载的。但是，对于ApplicationMaster这个容器，比较特殊，它是由ResourceManager直接告诉NodeManager去加载的。而ApplicationMasterLauncher就是负责这个工作的。
+
+在ApplicationMasterLauncher的内部，有一个线程池，用于启动ApplicationMaster。它不仅会为新提交的Application启动ApplicationMaster，也会为那些失败的ApplicationAttempt重启一个ApplicationMaster。在一个Application完成后，它也负责告诉NodeManager来清理ApplicationMaster.
+
+- YarnScheduler: 这个组件负责将Application分配到对应的队列上。它会基于CPU，内存，磁盘等进行调度。
+
+- ContainerAllocationExpirer: 这个组件用于确保为ApplicationMaster分配的Container,都会被加载。
+
+由于ApplicationMaster是不被信任的，它可能会申请任意多的Container，而并不分配，只是恶意的导致ResourceManager无法为新的Application分配Container.
+
+所以，这个组件如果在一段时间之内，不能从NodeManager上，接收到ResourceManager已经分配的Container的heartbeat，就会认为这个Container已经挂掉了，并告诉ResourceManager让这个Container过期。
+
+另外，一个容器的过期时间，也会被编码到和Container相对应的ContainerToken中，并一同发送给NodeManager。这样可以防止NodeManager来加载已经过期的容器。
+
+但是，我们也可以看到，除非NodeManager和ResourceManager的时钟同步，否则这会导致一些我们不希望看到的错误。
+
+#### 和安全相关的组件
+
+- RMContainerTokenSecretManager: 这个组件，负责为Container生成ContainerToken，并维护这些信息。
+
+ContainerToken中维护着和这个Container相关的一些信息，并且被加密过。由于ApplicationMaster是不被信任的，所以我们需要ContainerToken，让NodeManager来验证这个Container是否确实是ResourceManager分配的，以及是否确实就是在这个NodeManager上运行的，等其他信息。
+
+ContainerToken中，包含下面的信息:
+  - Container ID
+  - NodeManager address
+  - Application submitter
+  - Resource
+  - Expiry timestamp
+  - Master key identifier: ResourceManager生成的一个安全密钥
+  - ResourceManager identifier: 由于在ResourceManager分配给ApplicationMaster容器之后，以及这个容器被从NodeManager启动之前，ResourceManager可能挂掉并启动了一个新的。为了避免这种情况，就需要ResourceManager将它的ID也编码到ContainerToken中。如果一个NodeManager重启，它会停掉之前运行的所有的Container，NodeManager也会拒绝运行由以前的ResourceManager分配的Container.
+
+- AMRMTokenSecretManager: 这个组件为每个ApplicationMaster都生成一个Token。ResourceManager会通过这个Token验证每个来自ApplicationMaster的请求。
+
+ApplicationMaster可以通过本地化过的文件，**'ApplicationConstants.CONTAINER_TOKEN_FILE_ENV_NAME'**，来获得这个Token文件。
+
+- NMTokenSecretManager: ApplicationMaster通过NMToken来和NodeManager进行通讯。
+
+- RMDelegationTokenSecretManager: 这个组件负责为Client生成一个token.
+
+- DelegationTokenManager: 这个组件负责在Kerberos验证中，为已提交的Application生成一个新的Token.
+
+#### ResourceManager总结
+
+从上面的组件我们可以看到，ResourceManager的主要功能，就是分配ApplicationMaster，为ApplicationMaster分配容器，以及监控NodeManager的状态和集群中的可用资源。
+
+## NodeManager
+
+NodeManager的任务包括：
+- 和ResourceManager保持同步
+- 跟踪Node的状态
+- 监控Container的生命周期，监控Container使用的资源
+- 管理Distributed Cache
+- 管理Container生成的日志
+- 执行一些可能被不同的YARN application使用到的辅助的Service
+
+在NodeManager注册到ResourceManager之后，它就会不间断的向ResourceManager发送heartbeat，如果ResourceManager有需要它执行的指令，就作为响应发送给它。
+
+在ResourceManager收到NodeManager的heartbeat并处理完之后，对应这个NodeManager的Container，就会在下一次ApplicationMaster给ResourceManager发送heartbeat时，作为ResourceManager的响应，发送给ApplicationMaster.
+
+在NodeManager加载一个Container之前，它需要本地化需要的Resource，包括数据文件，可执行文件，shell script等。这些Resource可能有能够在不同用户之间共享的Resource，有能够在相同用户不同Application之间共享的Resource，以及只能够被这一个Container使用的Resource.
+
+NodeManager也可以在ResourceManager的指示下，杀掉Container。当处于下面的几种场景中时，NodeManager就可能Kill掉一个Container:
+- ResourceManager告诉它，Application已经完成了
+- Scheduler决定抢占这个Container，并将它分配给另一个Application或者用户
+- NodeManager检测到，这个Container使用的资源已经超过了ContainerToken中指定的那些资源的限制
+
+当一个Container完成时，NodeManager会清除它在本地存储的数据。当一个Application完成时，NodeManager会删除全部跟它相关的Container的数据。
+
+#### NodeManager组件
+
+- NodeStatusUpdater: 在一个NodeManager被注册到ResourceManager时，这个NodeManager会告诉ResourceManager一些信息，比如NodeManager上Web Server以及RPC Server监听的端口。而ResourceManager会告诉NodeManager一些和安全相关的信息，比如，master key，NodeManager用它来验证ApplicationMaster提交给它的Container.
+
+在NodeManager注册完以后，在后面的通讯中，NodeStatusUpdater会告诉ResourceManager，NodeManager上的Container的状态，NodeManager上刚启动的Container，以及完成的Container.
+
+ResourceManager也可以通过和这个组件的沟通，让NodeManager Kill掉一个Container。
+
+当一个Application结束后，ResourceManager会告诉NodeManager来清理掉和Application相关的一切信息。并且会将每个Application的日志聚合到一个文件系统中。
+
+- ContainerManager: 这个组件又包含了几个其他的部分：RPC Server, Web Server, ResourceLocalizationService, ContainersLauncher, AuxServices, ContainersMonitor, LogHandler.
+
+其中RPC Server接收来自ApplicationMaster的请求，来运行或者停止一个Container。
+
+ResourceLocalizationService会将Resource进行本地化，根据不同的Resource visibility - PUBLIC, APPLICATION, PRIVATE，会执行不同的本地化操作。
+
+ContainersLauncher内部维护了一个线程池，来准备并且启动Container。当RPC Server接收到一个Clean up的请求，或者NodeStatusUpdater接收到一个Clean up的请求，它也会对Container进行 Clean up的操作。每个启动或者Clean up的操作，都是在一个线程中执行的，并且直到对应的操作完成才会返回。所以，不同Container之间是相互不影响的。
+
+AuxiliaryServices是一些可插拔的Services。有的时候，NodeManager上的现有的Services不能完全满足我们的需求，比如，我们上面提到过，在一个Container完成之后，NodeManager会清理掉它占用的本地资源。在MapReduce中，这明显不合理，Mapper的输出还要传送给Reducer呢。
+
+所以，YARN通过这样一种方式，让我们可以自己配制一些Service，来增强它的功能。
+
+AuxiliaryServices，会在Application第一次启动Container，每个Container的启动和结束，以及Application完成时收到通知，并执行其中预定义的操作。
+
+在一个Container启动时，AuxiliaryServices相关的信息，会返回给ApplicationMaster。这样，ApplicationMaster就能够接收AuxliaryServices中我们希望它知道的信息。比如，在MapReduce中，会通过这种方式获得ShuffleHandler的端口信息。
+
+ContainersMonitor会监控Container占用的资源是否超过了给它配制的最大值，如果是，则将它Kill掉。
+
+Log Handler负责决定是在这个NodeManager保存Container的日志，还是将它压缩打包之后，上传到某个文件系统上。
+
+- ContainerExecutor: 负责从操作系统层面启动Container。
+
+- NodeHealthCheckerService: 这个组件会通知经常执行预先配制的检查脚本，来检查Node是否有问题。此外，它还可以通过创建临时文件的方式，检查Node的磁盘是否有问题。每一次这个信息修改，都会被发送给NodeStatusUpdater。最后被发送给ResourceManager.
+
+- ContainerTokenSecretManager: 用于验证ApplicationMaster让NodeManager启动的Container,都经过ResourceManager验证过。
+
+- Web Server: 提供一个Web界面，里面包含了Application列表，Node状态，Container日志等信息。
+
+## ApplicationMaster
+
+一旦ApplicationMaster成功启动后，那么它就要做这些事情：
+- 和ResourceManager保持连接，定期向ResourceManager发送heartbeat
+- 计算一个Application需要的Resource
+- 通过**ResourceRequest**的形式，跟ResourceManager沟通，让ResourceManager给它分配Container
+- 和NodeManager沟通来加载Container
+- 跟踪Container的状态
+- 处理Container故障或者Node故障的问题
+
+当ApplicationMaster注册到ResourceManager时，它可以向ResourceManager发送IPC address或者Web URL. 而ResourceManager作为响应，会返回给它一些它需要的信息，比如，ResourceManager能够接受的最小以及最大的Resource的限制, Application的ACL等。
+
+在ApplicationMaster成功注册到ResourceManager之后，它就需要不间断地向ResourceManager发送心跳信息，保证ResourceManager知道它还存活。
+
+如果ApplicationMaster积累了足够多的ResourceRequest，或者已经到了再次发送heartbeat的时候了，那么它就会通过heartbeat信息，将这些ResourceRequest发送给ResourceManager.
+
+ResourceRequest是ApplicationMaster发送给ResourceManager的用于请求Resource的一个数据结构。它包含了:
+- Priority of the request
+- Resource location。当前接受一台主机的名称或者一个机架的名称。有一个比较特殊的值，**"\*"**代表任何主机或者机架都可以。
+- 请求的各种资源。比如内存，CPU。
+- Container的数量，以及对应的Priority和Resource location.
+- relaxLocality flag。这个flag用于告诉ResourceManager如果不能在指定的Resource location上面分配，是否选择一个与它相邻的。
+
+当ApplicationMaster从ResourceManager中取到Container之后，它就开始在NodeManager上真正启动这个Container。
+
+ApplicationMaster会构造一个**ContainerLaunchContext**对象，这个对象中，包含了运行一个Container所需要的全部信息，比如，ResourceManager分配给这个容器的Resource，一些token，Container要执行的命令，环境变量等。它既可以一个一个地启动这些Container，也可以一次把它们全部启动起来。
+
+在NodeManager接收到AppliationMaster的请求之后，它会发送一个列表作为响应，里面包含了已经成功启动的Container，以及失败的Container，以及NodeManager上全部AuxiliaryService相关的元数据。
+
+ApplicationMaster也可以告诉NodeManager来停止Contaienr，通过发送一个**StopContainersRequest**，这个请求包含了要停止的Container的ID。NodeManager会回复一个**StopContainersResponse**，告诉ApplicationMaster哪些Container已经成功停止。
+
+此外，处理Container失败的情况，是Application的责任. YARN只是将集群中的资源暴露给Application。
+
+所以，ApplicationMaster需要观察Container的状态，exit code，以及一些诊断信息。例如，当MapReduce ApplicationMaster知道一个Container失败之后，它会不断重试这个Map或者Reducer，通过跟ResourceManager沟通分配Container。直到达到了指定的最大重试阈值。
+
+此外，ApplicationMaster也需要在它自己发生错误并恢复后，恢复之前的Applicaiton的信息。当一个ApplicationMaster发生错误之后，ResourceManager只会启动一个新的ApplicationAttempt，并为其分配一个ApplicationMaster。这个新的ApplicationMaster应该能够自动检索旧的ApplicationMaster中的Application的信息。当然，如果从头再运行一个也是可以的。但是毕竟性能可能低一些。
+
+在MapReduce中，ApplicationMaster会恢复已经完成的Task，而那些在ApplicationMaster恢复过程中仍在运行的Task，则会被Kill掉。
+
+当一个ApplicationMaster已经完成了它的全部工作之后，它应该向ResourceManager发送一个**FinishApplicationRequest**的请求，来取消注册。在这个请求中，ApplicationMaster可以告诉ResourceManager一个IPC以及Web URL，让Client能够检索这个Application的历史信息。
+
+## 总结
+
+在这篇文章中，我们详细阐述了ResourceManager，NodeManager以及ApplicationMaster的作用。

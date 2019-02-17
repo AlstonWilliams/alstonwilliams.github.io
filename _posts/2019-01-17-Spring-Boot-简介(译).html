@@ -1,0 +1,92 @@
+---
+layout: post
+title: Spring-Boot-简介(译).html
+date: 2019-02-17
+author: AlstonWilliams
+header-img: img/post-bg-2015.jpg
+catalog: true
+categories:
+- Java
+tags:
+- Java
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot-简介(译)</title>
+    <style type="text/css" media="all">
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        color: #777;
+        background-color: white;
+      }
+      .container {
+        width: 700px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .post {
+        font-family: Georgia, "Times New Roman", Times, "SimSun", serif;
+        position: relative;
+        padding: 70px;
+        bottom: 0;
+        overflow-y: auto;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 25px;
+        color: #515151;
+      }
+
+      .post h1{
+        font-size: 50px;
+        font-weight: 500;
+        line-height: 60px;
+        margin-bottom: 40px;
+        color: inherit;
+      }
+
+      .post p {
+        margin: 0 0 35px 0;
+      }
+
+      .post img {
+        border: 1px solid #D9D9D9;
+      }
+
+      .post a {
+        color: #28A1C5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="post">
+        <h1 class="title">Spring Boot-简介(译)</h1>
+        <div class="show-content">
+          <blockquote>
+<p>译者注:<br></p>
+<p>国内对于Spring Boot的介绍也有不少了．那我为何还要专门再翻译这么一篇文章呢？因为这篇文章中，对于Spring Boot与Spring的关系，描述的比较生动．</p>
+</blockquote><p>几个月之前，我在Barcelona参加了 Spring IO 2015.这里有很多关于Spring生态系统的新东西，比如新版本的Spring, Spring Cloud,微服务架构，WebSockets等．让我最感兴趣的是，几乎所有的演示程序，都是用一种叫做Spring Boot的工具写的．</p><p>在Spring Boot出现之前，创建一个基于Spring的应用，对那些刚开始使用Spring的人(即使是Spring老鸟)来说，由于其配置的复杂性，过程是极其痛苦的．现在，使用Spring Boot,我们可以很轻易的就构建一个能够用于生产环境的Spring应用．而这，都是由于Spring Boot约定优先的特性．Spring Boot会自己配置一个Spring应用，然后让我们能够开箱即用．</p><p>现在，创建一个Spring应用，你只需要用浏览器打开Spring Boot的初始化器页面，输入项目的元数据，选择项目的依赖，然后点击”Generate Project”.</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-6d15f2e54a77587d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-6d15f2e54a77587d?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>上面的步骤，会为你生成一个新的项目．你可以将它保存到机器上，然后用你喜欢的IDE打开，构建并运行，而不需要任何配置．如果你在新建项目时，选择的是”Jar”模式，它会在里面自动为你嵌入一个Tomcat，这样，你就可以直接运行了．当然，你也可以选择”War”模式，然后手动将它部署到你喜欢的服务器上．</p><p>但是，在Spring IO上，Josh Long建议你最好选择Jar模式，而不是War模式.为什么呢?因为Jar模式让你能够更加方便的构建一个微服务．我们可以想象一下，假如你有50个微服务，每个都需要你手动部署到服务器上．那是有多么麻烦啊!</p><p>你也可以使用你最喜欢的IDE来创建应用，如果它集成了Spring Initializer的话．这种IDE有IntelliJ, Eclipse和NetBeans.</p><p>除此之外，你还可以使用Spring提供的CLI，从命令行里创建项目．使用这种方式，在创建项目时，可以配置的选项就相对较少了．</p><p>必须要说明的是，Spring Boot并不是用于代码生成的．它是用来启动项目的，使用它默认的配置．你可以在属性文件或者类中重写这些属性．Spring Boot完全可以做到无需XML来进行配置，当然，如果你喜欢用的话，还是可以用的．</p><p>前些日子，我看到Phil Webb发了一篇博文，说Spring Boot是一个封装了Spring的框架(这个观点实际上是对的)．同时，他还发了几张图片，用来解释Spring Boot的核心概念非常好:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-4216543ab7546a98?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-4216543ab7546a98?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-5810bae519aa6a20?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-5810bae519aa6a20?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>我觉得这个比喻特别恰当．当使用Spring框架时，你有很多配料，来自己做一个好吃的蛋糕(或者Spring应用)．但是，当使用Spring Boot时，实际上是已经根据你选的配料给你生成了一个蛋糕．如果你想改变这个蛋糕的口味，颜色和形状，做就是，Spring Boot将会给你一个新的蛋糕．</p><p>Spring Boot的自动配置，是通过starters和conditional annotations实现的．</p><p>Starter把一堆相关依赖给封装成了一个，然后我们在项目中只需要导入这一个starter就行，而不需要像以前那样，导入很多依赖．这让我们简化了我们的依赖配置文件．例如，如果你想要创建一个web应用，现在你只需要在<i>pom.xml</i>文件中，添加这个starter即可:</p><p><br></p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-a9b0e649411896af?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-a9b0e649411896af?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>这个starter会自动为你添加那些创建一个Spring Web应用需要的依赖．</p><p>那Conditional annotations是干嘛的呢？它们会根据classpath中的类的注解，属性文件，来实现自动配置．比如，我们可以通过注解来配置一个beans.用这种方式，Spring Boot能够为我们自动配置一个默认数据库，JMS队列，属性等，而不需要我们明确的进行配置．用于实现这些行为的注解有:</p><p>Class conditions: @ConditionalOnClass and @ConditionalOnMissingClass.</p><p>Bean conditions: @ConditionalOnBean and @ConditionalOnMissingBean.</p><p>Property condition: @ConditionalOnProperty.</p><p>Resource condition: @ConditionalOnResource.</p><p>Web application conditions: @ConditionalOnWebApplication and @ConditionalOnNotWebApplication.</p><p>SpEL expression condition: @ConditionalOnExpression.</p><p>将Starter和Conditional annotation组合起来使用，你也可以创建你自己的可以自动配置的start．这种功能在有的情景中很有用．比如，你的公司想要创建共享库或者大量配置基本相同的项目．</p><p>你可以从附录上的链接中，看到Spring提供给我们的starters的完整列表，以及如何创建你自己的auto configuration.</p><p>Spring Boot不止可以自动配置并启动Spring应用．它还有很多其他的特色．比如，如果你在你的POM文件中添加<i>spring-boot-starter-actuator</i>这个starter,或者在Initializer页面中，选择”Actuator”，你会为你的Spring应用添加几个用于监控的接口．下面是从Spring文档中截取的可用的接口:</p><p>/autoconfig: Displays an auto-configuration report showing all auto-configuration candidates and the reason why they ‘were’ or ‘were not’</p><p>/beans: Displays a complete list of all the Spring beans in your application.</p><p>/configprops: Displays a collated list of all @ConfigurationProperties.</p><p>/dump: Performs a thread dump.</p><p>/env: Exposes properties from Spring’s ConfigurableEnvironment.</p><p>/health: Shows application health information (a simple ‘status’ when accessed over an unauthenticated connection or full message details when authenticated).</p><p>/info: Displays arbitrary application info.</p><p>/metrics: Shows ‘metrics’ information for the current application.</p><p>/mappings: Displays a collated list of all @RequestMapping paths.</p><p>/shutdown: Allows the application to be gracefully shutdown (not enabled by default).</p><p>/trace: Displays trace information (by default the last few HTTP requests).</p><p>这些接口都会返回JSON数据，你可以抓取这些数据，并做一些有用的工作．比如，监控应用．你也可以通过在Spring Boot中集成JMX，来检查这些接口．</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-eb5fa9d99ebabb1b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-eb5fa9d99ebabb1b?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>监控我们的Spring Boot应用的另一种方式是通过集成一个叫做<i>CRaSH</i>的远程Shell.要在你的应用中集成它，你必须在你的POM文件中，添加<i>spring-boot-starter-remote-shell</i>这个starter.加上这个starter之后，你就可以通过在terminal中输入ssh -p 2000 user@localhost以及在启动应用时在日志中看到的密码来连接到你的应用了:</p><p><br></p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-2705b5554b3ea36a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-2705b5554b3ea36a?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>连接上之后，你就可以输入help来查看所有可以执行的命令．你会看到跟你可以通过命令来查看上面的接口中可以查看的东西．</p><p>你也可以通过Groovy或者Java语言来创建命令．更多细节请查看CRaSH文档．</p><p>通过上面的介绍，我们可以看到，Spring Boot是一个非常有用的框架，它能让我们迅速的搭建一个生产级的应用，而不需要在复杂的配置上花费很多时间．而且，通过一个starter,我们就能导入之前需要写很多依赖项的一系列相关的依赖．我们还能通过监控应用．Spring Boot让我们能够启动和监控应用！</p><h1>参考链接</h1><p>Spring Boot Starters list:</p><p><a href="" target="_blank">https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters</a></p><p>Spring Boot Create Own Auto-configuration:</p><p><a href="" target="_blank">http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/boot-features-developing-auto-configuration.html</a></p><p>Spring-Boot-Reference-Guide中文版:</p><p><a href="" target="_blank">https://www.gitbook.com/book/qbgbook/spring-boot-reference-guide-zh/details</a></p><p>使用 Spring Boot 快速构建 Spring 框架应用:</p><p><a href="" target="_blank">https://www.ibm.com/developerworks/cn/java/j-lo-spring-boot/</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

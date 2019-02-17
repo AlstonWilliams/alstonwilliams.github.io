@@ -1,0 +1,85 @@
+---
+layout: post
+title: 简单的Docker容器监控工具.html
+date: 2019-02-17
+author: AlstonWilliams
+header-img: img/post-bg-2015.jpg
+catalog: true
+categories:
+- Docker
+tags:
+- Docker
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单的Docker容器监控工具</title>
+    <style type="text/css" media="all">
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        color: #777;
+        background-color: white;
+      }
+      .container {
+        width: 700px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .post {
+        font-family: Georgia, "Times New Roman", Times, "SimSun", serif;
+        position: relative;
+        padding: 70px;
+        bottom: 0;
+        overflow-y: auto;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 25px;
+        color: #515151;
+      }
+
+      .post h1{
+        font-size: 50px;
+        font-weight: 500;
+        line-height: 60px;
+        margin-bottom: 40px;
+        color: inherit;
+      }
+
+      .post p {
+        margin: 0 0 35px 0;
+      }
+
+      .post img {
+        border: 1px solid #D9D9D9;
+      }
+
+      .post a {
+        color: #28A1C5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="post">
+        <h1 class="title">简单的Docker容器监控工具</h1>
+        <div class="show-content">
+          <p>提到Docker容器的管理与监控，往往人们想到的都是Kuberbetes等这些分布式的工具．然而，要搭建一套这些东西，往往不简单．<br></p><p>那有没有什么简单易用的方式呢?</p><p>第一种方式，使用Docker自带的stat命令:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-71e9579853abbfe9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-71e9579853abbfe9?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>这条命令，能够实时的显示出来此时Docker容器消耗的主机资源．如果我们想要观察某一段时间内某个容器对主机资源的使用情况，我们就不能通过这种方式了．</p><p>还有一种方式，就是使用Cadvisor工具．这款工具是google推出的．也支持在Docker容器中运行．通过下面的命令启动:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-30cd73b309d08a46?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><br><div class="image-caption"></div>
+</div><p>启动完成后，打开<i>8080</i>端口，如下图所示:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-bbc974444893c973?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-bbc974444893c973?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>其实这款工具不仅可以监控容器对主机资源的使用情况，也可以监控主机的各项资源的使用情况．什么意思呢?就是除Docker容器之外，它还会监控其他进程对主机上的各项资源的使用情况.</p><p>点击上图中的<i>Subcontainers</i>中的<i>/docker</i>，在从中选择一个容器，我们就能看到这个容器在一段时间内的资源利用情况.</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-75fde1bcc0767c4f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-75fde1bcc0767c4f?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>当然，这些工具只是能进行简单的监控．如果想要比较完善的监控，还是使用nagios以及kubernetes等比较好．</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

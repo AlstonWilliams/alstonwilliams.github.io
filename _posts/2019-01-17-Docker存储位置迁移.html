@@ -1,0 +1,101 @@
+---
+layout: post
+title: Docker存储位置迁移.html
+date: 2019-02-17
+author: AlstonWilliams
+header-img: img/post-bg-2015.jpg
+catalog: true
+categories:
+- Docker
+tags:
+- Docker
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker存储位置迁移</title>
+    <style type="text/css" media="all">
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        color: #777;
+        background-color: white;
+      }
+      .container {
+        width: 700px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .post {
+        font-family: Georgia, "Times New Roman", Times, "SimSun", serif;
+        position: relative;
+        padding: 70px;
+        bottom: 0;
+        overflow-y: auto;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 25px;
+        color: #515151;
+      }
+
+      .post h1{
+        font-size: 50px;
+        font-weight: 500;
+        line-height: 60px;
+        margin-bottom: 40px;
+        color: inherit;
+      }
+
+      .post p {
+        margin: 0 0 35px 0;
+      }
+
+      .post img {
+        border: 1px solid #D9D9D9;
+      }
+
+      .post a {
+        color: #28A1C5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="post">
+        <h1 class="title">Docker存储位置迁移</h1>
+        <div class="show-content">
+          <p>今天本来想给各位介绍一下Spring Boot,但是因为后面一直在尝试迁移Docker存储位置，而且觉得这个意义比较大．就暂且先介绍一下如何迁移Docker的存储位置．以后有时间，在介绍Spring Boot.<br></p><p>前面<i>&lt;由Docker垃圾回收机制引起的一场血案&gt;</i>这篇文章中，我们已经说过，因为Docker的文件太多，将我们的服务器上的硬盘空间给耗尽了．同时，也提到了一种解决方案，就是将Docker的存储位置迁移到一个更大的硬盘上．</p><p>这不，这两天，我们加了一块较大的硬盘，就想将Docker的数据迁移一下．</p><h1>目标</h1><p>因为<i>/var</i>文件夹最大，所以我们打算将这个文件夹迁移到那台新的硬盘上．</p><p>Docker数据的文件夹是<i>/var/lib/docker</i>．所以，迁移<i>/var</i>文件夹，Docker数据也会跟着迁移．</p><h1>具体过程</h1><p>首先，先停掉全部的Docker容器:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-f29248f2c053da93?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-f29248f2c053da93?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>然后，我们还需要停掉Docker daemon:<b>sudo service docker stop</b></p><p>由于是新加的硬盘，我们需要给它进行分区以及格式化操作，否则用不了．</p><p>进行如下图所示的操作:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-4a3a814eb946ebcf?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-4a3a814eb946ebcf?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>当然，如果你是一块全新的硬盘，这里肯定跟上图不一样．分区号你的应该默认是1,也不会有下面的那句没有空闲扇区可用．</p><p>新建完这个分区之后，我们需要对其进行格式化．这里我们将其格式化为ext3:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-68549ac50646c316?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-68549ac50646c316?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>输入上面的那条命令之后，我们需要耐心等待一段时间．</p><p>有读者可能注意到，上面的命令中，我们使用的分区是<i>/dev/xvdb1</i>，而不是<i>/dev/xvdb</i>.<i>/dev/xvdb1</i>是一个分区，是对<i>/dev/xvdb</i>这块硬盘分区得来的．不要把两者搞混．</p><p>同样，这里格式化的分区，以你实际创建的分区为标准．</p><p>然后，我们在根目录下新建一个临时目录<i>/data</i>,这个目录相当于中转站，只是<i>/dev/xvdb1</i>这个物理分区在逻辑目录树上的一个表现而已．</p><p>mkdir /data</p><p>我们将<i>/data</i>这个中转站目录与我们的物理分区挂载起来:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-0acd8a4c7af82f23?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-0acd8a4c7af82f23?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>然后将<i>/var</i>这个目录中的内容原封不动得拷贝到这个中转站目录中．这样就相当于我们把<i>/var</i>目录中的内容都拷到了<i>/dev/xvdb1</i>这个分区来了．对吧?</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-02aed69ca7215c5f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-02aed69ca7215c5f?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>这条命令会将<i>/var</i>目录中的内容，原封不动的拷贝到<i>/data</i>目录中．包括文件的各种属性，如权限，时间戳等．</p><p>这里我们需要耐心等待，随着你的<i>/var</i>目录的增大，拷贝的时间也会增长．</p><p>拷过来之后，其实我们的数据迁移工作就完成了．因为此时Docker的数据已经完好无误的拷贝到<i>/dev/xvdb1</i>这个分区中了．我们完全可以通过在Docker的配置文件中指定数据存储的目录为<i>/data/lib/docker</i>，以后都使用这块新的硬盘来存储或者读取Docker的数据.编辑<i>/etc/default/docker</i>:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-c2c5574c56f7cfef?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-c2c5574c56f7cfef?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>然后再重启Docker daemon．你可以看到一切都没有问题．使用<i>docker start</i>命令启动容器，应该也是没有问题的．</p><p>然而，我们是将整个<i>/var</i>目录中的内容都复制过来了，因为我们的目标是将<i>/var</i>目录中的内容放到另一个硬盘上．那我们就需要做下面的额外的步骤了.</p><p>先将原来的<i>/var</i>改一个名字，如<i>/var.old</i>:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-f33d9955d826c4f7?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-f33d9955d826c4f7?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>然后，再新建一个<i>/var</i>文件夹:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-258f4cc8010fab99?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-258f4cc8010fab99?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>然后，将上面的<i>/data</i>卸载掉，并将<i>/dev/xvdb1</i>这个分区挂载到新创建的<i>/var</i>上:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-eeeaf692d796c5fd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-eeeaf692d796c5fd?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-89f0d334db249a72?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-89f0d334db249a72?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>如果你再执行<i>umount</i>命令时，遇到Device is busy的问题，可以通过下面的命令来解决:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-a181bb433ec01245?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-a181bb433ec01245?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>它会杀掉那些跟<i>/data</i>文件相关的进程．然后在umount应该就没有问题了．</p><p>我们还需要最后一步，就大功告成了.编辑<i>/etc/fstab</i>,在文件的最后加入下面的<i>/dev/xvdb1</i>开头的那行:</p><div class="image-package">
+<img src="http://upload-images.jianshu.io/upload_images/4108852-847710ca01b13da1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/4108852-847710ca01b13da1?imageMogr2/auto-orient/strip"><br><div class="image-caption"></div>
+</div><p>这样我们就完整的将第一块硬盘上的移动到第二块硬盘上啦．</p><p>我们启动完docker daemon,再启动起来那些Docker容器，就可以正常使用啦．</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
