@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 Docker 1.12.5版本的源码中，很多源码都是放在**vendor/src**目录下的，在Intellij IDEA中打开，就提示找不着路径．
 

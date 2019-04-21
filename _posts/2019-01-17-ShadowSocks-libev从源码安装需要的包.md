@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 跨越GFW
+- 其它
 tags:
-- 跨越GFW
+- 其它
 ---
 先安装下面的两个包:
 **apt-get install libpcre3 libpcre3-dev**

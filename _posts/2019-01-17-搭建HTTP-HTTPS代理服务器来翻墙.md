@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 跨越GFW
+- 其它
 tags:
-- 跨越GFW
+- 其它
 ---
 这一段时间，打算尝试一下Kubernetes和Mesos，因为Docker自带的Swarm集群功能有限．然而，各位都知道，在我们大中华，很多国外的内容都是被封锁的．比如，Kubernetes的Docker镜像是在Google Cloud Platform上的．这就比较尴尬了．
 

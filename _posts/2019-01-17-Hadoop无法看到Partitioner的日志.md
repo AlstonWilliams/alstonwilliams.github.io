@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Hadoop
 tags:
-- 错误处理
+- Hadoop
 ---
 正常情况下，我们在自定义的**Partitioner**中输出的日志，会在Mapper的日志中看到。
 

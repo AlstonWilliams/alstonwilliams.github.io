@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 执行下面的命令关掉tracker即可:
 **echo -e "

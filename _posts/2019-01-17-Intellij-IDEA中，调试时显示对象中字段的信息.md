@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java
+- 其它
 tags:
-- Java
+- 其它
 ---
 今天在阅读ConcurrentHashMap的源码时，由于实在是看不懂其中的各个字段的作用，不知道到底是干什么用的，于是就想调试一下看看．
 

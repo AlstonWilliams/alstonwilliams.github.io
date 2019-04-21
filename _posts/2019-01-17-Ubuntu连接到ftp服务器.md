@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- 其它
 tags:
-- 小工具
+- 其它
 ---
 在实训时，由于要求使用Windows系统，而我使用的是Ubuntu系统．了解到Windows上的连接到Server时，使用的是ftp协议，所以我们完全可以自行连接．只不过麻烦一点．
 

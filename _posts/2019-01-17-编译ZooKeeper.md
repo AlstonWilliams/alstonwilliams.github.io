@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 开源项目编译过程
+- ZooKeeper源码解析
 tags:
-- 开源项目编译过程
+- ZooKeeper源码解析
 ---
 最近在研究分布式系统，由于ZooKeeper作为一个键值存储系统，结构相对比较简单，但是麻雀虽小五脏俱全，是一个不错的适合新手阅读的项目，所以就选择了ZooKeeper.
 

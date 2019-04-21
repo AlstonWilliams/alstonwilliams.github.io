@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- 其它
 tags:
-- 小工具
+- 其它
 ---
 在Vim中,用C语言写demo,虽然加上NERDTree插件之后,写起来很方便,但是,我们仍然需要手动输入很多代码,比如变量名等.而在现在的IDE中,却有自动提示功能,我们只需要输入首字母,然后选择对应的变量名或者方法名,就能节省很多的输入时间.
 

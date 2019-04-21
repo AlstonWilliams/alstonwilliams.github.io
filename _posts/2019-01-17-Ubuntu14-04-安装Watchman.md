@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- 其它
 tags:
-- 小工具
+- 其它
 ---
 打算重写项目的UI.因为之前用的国内的某家公司的html5来做的APP的前台,而这家公司的这个产品可能还不成熟,而导致做出来的APP的前台老是有一些问题.于是就打算采用React Native来进行重写.
 

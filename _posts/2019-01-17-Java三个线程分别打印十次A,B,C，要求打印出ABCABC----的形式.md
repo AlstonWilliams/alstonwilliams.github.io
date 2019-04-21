@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java疑难问题
+- Java
 tags:
-- Java疑难问题
+- Java
 ---
 今天一位同学问我题目中的这个问题，并给了我下面的代码，花了好久才看懂，这里总结一下．
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 在通过ab进行压力测试时，遇到了这个问题．并发请求数为10000.
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- MySQL
 tags:
-- 小工具
+- MySQL
 ---
 由于现在在做的一个项目中,需要全文检索的功能,而之前用的5.5.53版本的Mysql并没有实现全文检索的功能,在5.7中实现了,于是就考虑着升级到5.7版本.
 

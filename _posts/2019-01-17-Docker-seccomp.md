@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Docker
+- 容器
 tags:
-- Docker
+- 容器
 ---
 **注：本文翻译自[Docker Security – part 2](https://sreeninet.wordpress.com/2016/03/06/docker-security-part-2docker-engine/)中关于Seccomp的部分．请查看原文来获取更详细的信息．**
 

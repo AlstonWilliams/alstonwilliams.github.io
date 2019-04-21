@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- 其它
 tags:
-- 小工具
+- 其它
 ---
 原文地址:https://haydenjames.io/web-host-doesnt-want-read-benchmark-vps/
 

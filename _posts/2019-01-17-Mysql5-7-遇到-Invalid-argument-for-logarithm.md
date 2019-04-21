@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- MySQL
 tags:
-- 错误处理
+- MySQL
 ---
 在更新一些为值为Null的数据时，遇到了如题所示的问题．
 

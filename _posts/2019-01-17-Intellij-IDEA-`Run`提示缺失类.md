@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java疑难问题
+- 其它
 tags:
-- Java疑难问题
+- 其它
 ---
 有时，我们明明在maven中明确写明了，有那么一个依赖，但是，在Run的时候，却会提示那个依赖中的Jar包找不到。比如:
 

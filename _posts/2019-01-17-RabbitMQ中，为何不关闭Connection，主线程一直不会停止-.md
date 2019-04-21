@@ -1,6 +1,6 @@
 ---
 layout: post
-title: RabbitMQ中，为何不关闭Connection，主线程一直不会停止-
+title: RabbitMQ中，为何不关闭Connection，主线程一直不会停止
 date: 2019-02-17
 author: AlstonWilliams
 header-img: img/post-bg-2015.jpg

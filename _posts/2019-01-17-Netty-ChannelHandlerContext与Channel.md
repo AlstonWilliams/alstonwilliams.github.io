@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java-NIO
+- Java
 tags:
-- Java-NIO
+- Java
 ---
 当我们在一个Handler中时，我们要想写数据，有两种方式。一种是调用ChannelHandlerContext的相关的写数据的方法，一种是调用ChannelHandlerContext.channel()的相关的写数据的方法。
 

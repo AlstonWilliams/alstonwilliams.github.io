@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Hadoop
 tags:
-- 错误处理
+- Hadoop
 ---
 有的时候，我们通过**bin/yarn nodemanager**启动一个NodeManager时，我们在ResourceManager的输出中，能看到这么一个错误:**local-dirs are bad...**
 

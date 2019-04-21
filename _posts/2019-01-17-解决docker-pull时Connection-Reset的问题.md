@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Docker
+- 容器
 tags:
-- Docker
+- 容器
 ---
 由于众所周知的原因,当我们从docker.io pull镜像时,很可能会出现 Connection Reset或者Read time-out这类错误.
 

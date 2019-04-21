@@ -1,14 +1,14 @@
 ---
 layout: post
-title: java-lang-ClassNotFoundException--org-jetbrains-sbt-CreateTasks$
+title: java-lang-ClassNotFoundException--org-jetbrains-sbt-CreateTasks
 date: 2019-02-17
 author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 在创建Scala项目时，报这个异常。
 

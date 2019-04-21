@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 项目思考-设计与核心实现
+- 其它
 tags:
-- 项目思考-设计与核心实现
+- 其它
 ---
 我们打算设计一个接口统计系统，根据日志统计出来具有高延时的接口，以及错误信息等．开始打算使用Spark来做，后来得知Kafka中提供了这个功能，叫做Kafka Stream,基本的流处理已经能够实现了．于是就打算直接使用Kafka Stream来做．毕竟结构比较简单．
 

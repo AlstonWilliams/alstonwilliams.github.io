@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 小工具
+- 其它
 tags:
-- 小工具
+- 其它
 ---
 昨天要验证一个配置文件是否正确，然而以前只是通过accesskey，secretkey这些，通过s3cmd来连接。这次需要通过username和password来连接。
 

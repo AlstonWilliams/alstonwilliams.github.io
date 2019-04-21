@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Java
 tags:
-- 错误处理
+- Java
 ---
 从昨天开始,我们突然遇到了一个问题,就是连接到数据库时,提示**Too many connections**.即使知道这个错误是由于同时打开的连接数太多导致的,然而还是有点懵.因为即使我停止了微服务,在通过**show status**查看MySQL的当前连接数,还是没有变化.
 

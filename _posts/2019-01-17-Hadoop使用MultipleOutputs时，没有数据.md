@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Hadoop
 tags:
-- 错误处理
+- Hadoop
 ---
 在这么一个场景中，我们用到了**MultipleOutputs**。
 

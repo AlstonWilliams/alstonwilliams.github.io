@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 在一个C项目中,我们需要解析配置文件,然后选用了libconfuse库.从源码编译安装之后,照着官网的例子,写了一个测试程序,却不能成功运行,老是出现如题所示的错误.
 

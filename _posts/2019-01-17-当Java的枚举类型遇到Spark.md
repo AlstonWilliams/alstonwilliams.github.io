@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java疑难问题
+- Java
 tags:
-- Java疑难问题
+- Java
 ---
 其实不仅仅是Spark，也适用于其他的分布式技术。
 

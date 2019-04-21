@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 跨越GFW
+- 其它
 tags:
-- 跨越GFW
+- 其它
 ---
 之前在公众号中，有一篇文章介绍如何安装ShadowSocks-Qt5，但是这次在我重新安装时，却还是遇到了没有依赖的情况．
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 在开始阅读ZooKeeper的源码的过程中，发现无法导航到其他的类，甚至就连JDK自带的那些类都不能导航进去．于是Google了一下，结合了一下StackOverflow上的答案，解决了这个问题．
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 最近在用Vagrant配合VirtualBox来做Kubernetes的实验时，一直都遇到如题所示的错误。花了好长时间都没解决，甚至都重装系统了，还是没解决。
 

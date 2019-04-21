@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 项目思考-设计与核心实现
+- 其它
 tags:
-- 项目思考-设计与核心实现
+- 其它
 ---
 Kafka Stream API在处理完数据后，会将数据发送到我们预定义的topic．如果我们需要将这些数据发送给我们的WebUI，那么我们就需要写一个Consumer，让它订阅上面的那个topic,然后发送数据给WebUI.
 

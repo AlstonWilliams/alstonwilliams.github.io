@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Kubernetes
+- 容器
 tags:
-- Kubernetes
+- 容器
 ---
 想尝试一下Kubernetes，但是之前都因为无法配置而放弃．有如下三种配置方式:
 

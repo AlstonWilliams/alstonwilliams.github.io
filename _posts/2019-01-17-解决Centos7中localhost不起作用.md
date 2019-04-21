@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 其它
 tags:
-- 错误处理
+- 其它
 ---
 之前就有这个问题，但是一直没有什么太大的问题，就没解决．然而在配置Kubernetes dashboard时，因为默认的**apiserver**的hostname就是localhost,导致不能正常启动．这才想解决．
 

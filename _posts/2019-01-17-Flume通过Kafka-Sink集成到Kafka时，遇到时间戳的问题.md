@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Flume
 tags:
-- 错误处理
+- Flume
 ---
 因为我们需要将日志文件发送给Kafka，然后通过其流处理的功能对日志进行加工，所以需要通过Kafka Sink集成到Kafka.
 

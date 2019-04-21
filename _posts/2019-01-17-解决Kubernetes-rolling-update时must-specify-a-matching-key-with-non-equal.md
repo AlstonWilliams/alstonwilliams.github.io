@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Kubernetes
+- 容器
 tags:
-- Kubernetes
+- 容器
 ---
 本来rolling-update时，新创建一个rc文件，并更新其中的内容，然后使用**kubectl rolling-update rc_name -f rc_file**就可以更新成功了．但是，实际操作过程中，遇到了一个问题，就是如题所示的错误．具体的原因，请参考底部链接的文章．
 

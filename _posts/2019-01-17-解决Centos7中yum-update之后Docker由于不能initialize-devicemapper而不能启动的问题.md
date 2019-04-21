@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Docker
+- 容器
 tags:
-- Docker
+- 容器
 ---
 在Centos7中，做Kubernetes实验，中间由于输出的结果跟我看的书上不一致，打算升级一下看看．
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Java
+- 其它
 tags:
-- Java
+- 其它
 ---
 最近在做一个Web项目，由于Linux上的Eclipse丑的不能直视，操作又各种不方便，终于受够了Eclipse，重新用起了Intellij IDEA．
 

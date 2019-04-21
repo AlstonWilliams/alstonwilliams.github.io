@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- 容器
 tags:
-- 错误处理
+- 容器
 ---
 在cron中使用**docker exec -ti mysql mysqldump -A -u root -proot > /mysql_dump/all_dbs_$(date -I)**命令备份docker内的mysql数据库时，遇到的这个问题．
 

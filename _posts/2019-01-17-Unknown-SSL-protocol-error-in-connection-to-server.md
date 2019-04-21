@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 跨越GFW
+- 其它
 tags:
-- 跨越GFW
+- 其它
 ---
 上面的这个错误，相信在你**Curl**一个被GFW屏蔽的网站时，经常会遇到．这篇文章中，会介绍在中国发生这个错误最可能的原因．
 

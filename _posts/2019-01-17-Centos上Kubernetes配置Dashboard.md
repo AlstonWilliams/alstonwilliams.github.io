@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Kubernetes
+- 容器
 tags:
-- Kubernetes
+- 容器
 ---
 如果使用官方的tutorial来安装配置Kubernetes集群，Dashboard这个模块应该已经自带了．然而，谁让我们大中华享受不到那种待遇呢?
 

@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 错误处理
+- Protocol-Buffer
 tags:
-- 错误处理
+- Protocol-Buffer
 ---
 在安装protobuf的c++版本的编译器时,使用**protoc --version**命令查看版本时,遇到这个问题.
 

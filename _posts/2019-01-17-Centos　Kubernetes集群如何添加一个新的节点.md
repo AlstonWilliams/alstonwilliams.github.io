@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- Kubernetes
+- 容器
 tags:
-- Kubernetes
+- 容器
 ---
 在生产环境中，我们不可避免的会涉及到节点的动态添加与删除．下面我们就来介绍一下如何添加一个新的节点．
 

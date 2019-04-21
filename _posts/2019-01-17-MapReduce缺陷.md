@@ -6,9 +6,9 @@ author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
 catalog: true
 categories:
-- 大数据
+- Hadoop
 tags:
-- 大数据
+- Hadoop
 ---
 作为Hadoop的一个核心，MapReduce一直都是人们讨论的热点．而且，各类书籍上，往往也只是介绍了MapReduce的优点，其执行过程．对其缺陷，却并没有一个清晰的说明．包括你在百度，在Google上面用中文搜索"MapReduce"的局限性，都是得不到有价值的结果的．倒是有很多论文，专门讨论这个问题．
 
