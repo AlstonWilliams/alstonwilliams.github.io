@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 《Elasticsearch: The Definitive Guide》读书笔记
+title: 《Elasticsearch:The Definitive Guide》读书笔记
 date: 2019-05-15
 author: AlstonWilliams
 header-img: img/post-bg-2015.jpg
